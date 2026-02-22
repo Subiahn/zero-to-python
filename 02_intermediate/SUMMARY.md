@@ -1,6 +1,6 @@
-# 📝 Python 클래스 (OOP) 정리
+# 📝 Python 객체지향 & 심화 문법 정리 
 
-> 학습 기간: 2026년 2월 | 프로젝트: [budget_refactoring_1](./budget_refactoring_1/) · [budget_refactoring_2](./budget_refactoring_2/)
+> 학습 기간: 2026년 2월 | 프로젝트: [budget_refactoring_1](./budget_refactoring_1/budget_refactoring.py) · [budget_refactoring_2](./budget_refactoring_2/budget_refactoring_2.py) · [budget_modules](./budget_modules/) · [budget_cli_refactoring_type](./budget_cli_refactoring_type/budget_cli_refactoring_type.py) · [budget_cli_generator](./budget_cli_generator/budget_cli_generator.py)
 
 ---
 
