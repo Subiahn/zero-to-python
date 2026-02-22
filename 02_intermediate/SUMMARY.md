@@ -142,8 +142,8 @@ app2.add_income(30000, "아르바이트")
 
 ---
 
-
 ## 9. 모듈 (Module)
+
 ```python
 # budget.py — 클래스 정의만
 class BudgetApp:
@@ -152,6 +152,7 @@ class BudgetApp:
 if __name__ == "__main__":  # 직접 실행할 때만 동작
     app = BudgetApp()
 ```
+
 ```python
 # main.py — import 해서 사용
 from budget import FamilyBudgetApp
@@ -165,16 +166,107 @@ app.add_income(50000, "알바비")
 - `if __name__ == "__main__"` — 직접 실행할 때만 동작, import 시엔 무시됨
 
 ### import 방법
+
 ```python
-import budget                     # 모듈 전체
-from budget import FamilyBudgetApp  # 특정 클래스만 (가장 많이 씀)
-import budget as b                # 별명 붙이기
+import budget                        # 모듈 전체
+from budget import FamilyBudgetApp   # 특정 클래스만 (가장 많이 씀)
+import budget as b                   # 별명 붙이기
 ```
 
+---
 
+## 10. 타입 힌트 (Type Hint)
+
+```python
+class BudgetApp:
+    def __init__(self) -> None:
+        self.transacrions: list[dict] = []
+
+    def add_income(self, amount: int, memo: str) -> None:
+        self.transacrions.append({"type": "수입", "amount": amount, "memo": memo})
+
+    def show_summary(self) -> None:
+        income = sum(r['amount'] for r in self.transacrions if r["type"] == "수입")
+        print(f"수입: {income}")
+```
+
+- `파라미터: 타입` — 입력값 타입 지정
+- `-> 타입` — 반환값 타입 지정
+- `-> None` — 반환값 없음
+- 실행 결과는 똑같음 — 가독성 + IDE 자동완성 용도
+
+### 주요 타입
+
+| 타입 | 설명 | 예시 |
+| ---- | ---- | ---- |
+| `int` | 정수 | `amount: int` |
+| `str` | 문자열 | `memo: str` |
+| `bool` | 참/거짓 | `is_active: bool` |
+| `list[dict]` | 딕셔너리 리스트 | `items: list[dict]` |
+| `Optional[dict]` | dict 또는 None | `-> Optional[dict]` |
+
+### Optional — 반환값이 없을 수도 있을 때
+
+```python
+from typing import Optional
+
+def find_transaction(self, memo: str) -> Optional[dict]:
+    for t in self.transacrions:
+        if t["memo"] == memo:
+            return t
+    return None  # 못 찾으면 None 반환
+```
+
+---
+
+## 11. 제너레이터 (Generator)
+
+```python
+def income_transactions(self):
+    for t in self.transacrions:
+        if t["type"] == "수입":
+            yield t  # 하나씩 반환
+
+# 사용
+for t in app.income_transactions():
+    print(t)
+```
+
+- `return` 대신 `yield` 를 쓰면 제너레이터
+- 결과를 한 번에 다 만들지 않고 **하나씩 그때그때** 반환
+- 대용량 데이터 처리 시 메모리 절약
+
+### 일반 함수 vs 제너레이터
+
+```python
+# 일반 — 전부 메모리에 올림
+def get_income(self):
+    return [t for t in self.transacrions if t["type"] == "수입"]
+
+# 제너레이터 — 하나씩 꺼내서 처리
+def get_income(self):
+    for t in self.transacrions:
+        if t["type"] == "수입":
+            yield t
+```
+
+### 리스트 컴프리헨션 vs 제너레이터 표현식
+
+```python
+# 리스트 — [] , 전부 메모리에
+numbers = [i for i in range(1_000_000)]
+
+# 제너레이터 — () , 하나씩
+numbers = (i for i in range(1_000_000))
+```
+
+---
 
 ## 🔗 실습 프로젝트
 
-- [가계부 클래스 리팩토링](./budget_refactoring_1/) — `__init__`, `self`, 메서드
-- [가계부 상속](./budget_refactoring_2/) — 상속, `super()`, 오버라이딩
-- [가계부 모듈 분리](./budget_modules/) — 모듈, `import`, `if __name__`
+- [가계부 클래스 리팩토링](./budget_refactoring_1/budget_refactoring.py) — `__init__`, `self`, 메서드
+- [가계부 상속](./budget_refactoring_2/budget_refactoring_2.py) — 상속, `super()`, 오버라이딩
+- [가계부 모듈 분리 - 클래스](./budget_modules/budget.py) — 모듈, `if __name__`
+- [가계부 모듈 분리 - 메인](./budget_modules/main.py) — `import`, 모듈 사용
+- [가계부 타입 힌트](./budget_cli_refactoring_type/budget_cli_refactoring_type.py) — 타입 힌트, `Optional`
+- [가계부 제너레이터](./budget_cli_generator/budget_cli_generator.py) — `yield`, 제너레이터
